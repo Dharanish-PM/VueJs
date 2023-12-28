@@ -21,9 +21,7 @@ export default{
         toggle(){
             this.navbarActive=!this.navbarActive
         },
-        handleClick(){
-            console.log("");
-        },
+       
         logoutFunction(){
             localStorage.removeItem("username");
             localStorage.removeItem("role");
@@ -42,9 +40,15 @@ export default{
             this.notificationLoading=true
             this.getNotifications({success:this.onSuccess,failure:this.onFailure});
           },
-          updateNotification(curentNotificationID){
-            console.log(curentNotificationID);
-            this.updateNotification(curentNotificationID);
+          updateNotification(curentNotification){
+            
+            console.log(curentNotification);
+            // this.updatote(curentNotification.id);
+            this.updateNotification(curentNotification.id)
+          },
+          updatote(id){
+              console.log(id);
+
           },
           
           toggleSidebar() {

@@ -65,7 +65,7 @@ export default {
       // }
       const cellDate = info.date.toISOString().split("T")[0];
       if (this.isDateInHolidays(cellDate)) {
-        info.el.style.backgroundColor = "#aabbcc";
+        info.el.style.backgroundColor = "rgba(0,0,0,0.1)";
       }
   
       const year = info.date.getFullYear();

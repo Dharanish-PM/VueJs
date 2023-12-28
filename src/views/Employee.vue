@@ -87,7 +87,7 @@
                     v-for="(notification, index) in allNotifications"
                     :key="index"
                   >
-                    <v-expansion-panel-title disable-icon-rotate>
+                    <v-expansion-panel-title disable-icon-rotate @click="updateNotification(notification)">
                       <img
                         src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
                         alt=""
@@ -99,7 +99,7 @@
                         <v-icon color="error" icon="mdi-alert-circle"> </v-icon>
                       </template>
                     </v-expansion-panel-title>
-                    <v-expansion-panel-text>
+                    <v-expansion-panel-text class="Msg">
                       {{ notification.notificationMessage }}
                     </v-expansion-panel-text>
                   </v-expansion-panel>
@@ -171,6 +171,7 @@
   height: 45px;
   border-radius: 100%;
   border: 1px solid #eee;
+  margin-right: 1rem;
 }
 body {
   background-color: #f1f1f1;
@@ -328,6 +329,13 @@ body {
 a{
   text-decoration: none;
 }
+.count{
+  background: #f44064;
+  border-radius:50%;
+  padding: 0px 5px;
+  color: white;
+  font-size: 12px;
+}
 @media screen and (max-width: 768px) {
   #sidebarOpen {
     font-size: 25px;
@@ -353,6 +361,9 @@ a{
 .loader{
   margin: 0 auto;
 
+}
+.Msg{
+  text-transform: capitalize;
 }
 
 </style>

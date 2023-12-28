@@ -18,7 +18,7 @@ export default {
       totalTime: "--",
       startdate: "",
       enddate: "",
-      dialog: false,
+      dialog2 :false,
       reportDialog: false,
       notifications: false,
       sound: true,
@@ -36,6 +36,8 @@ export default {
       restrictDate: false,
       dotPosition: null,
       currentDotPosition: 0,
+      selectedEditDate:"",
+      editTime:"",
 
       customeWeek: [
         {
@@ -381,6 +383,28 @@ export default {
       }
       return false;
     },
+
+
+    sendEditRequest(){
+      this.errorSendingReq = false;
+      this.success = false;
+      this.requestLoader = true;
+      console.log(this.editTime);
+
+     
+
+      const requestBody = {
+        payload: {
+          employeeId: localStorage.getItem("empId"),
+          swipeDate: this.selectedEditDate,
+          swipeTime: `${this.editTime}:00`
+        },
+        success: this.onrequestSuccess,
+        failure: this.onrequestFailure,
+      };
+      this.swipe(requestBody);
+
+    }
   },
   props: ["userId"],
   mounted() {

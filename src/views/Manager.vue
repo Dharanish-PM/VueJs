@@ -96,7 +96,7 @@
                     v-for="(notification, index) in allNotifications"
                     :key="index"
                   >
-                    <v-expansion-panel-title disable-icon-rotate>
+                    <v-expansion-panel-title disable-icon-rotate @click="updateNotification(notification)">
                       <img
                         src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
                         alt=""
@@ -169,6 +169,13 @@
   position: relative;
   left: 10px;
   margin: 15px 0;
+}
+.count{
+  background: #f44064;
+  border-radius:50%;
+  padding: 0px 5px;
+  color: white;
+  font-size: 12px;
 }
 
 .notifytxt{

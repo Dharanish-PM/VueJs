@@ -1,7 +1,6 @@
 <template>
    <div class="main-content">
-    <h1 class="head">All Requests </h1>
-
+    <h1 class=""> </h1>
     <v-progress-circular
             indeterminate
             color="primary"

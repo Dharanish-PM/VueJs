@@ -79,6 +79,10 @@
   .btn{
     background-color: #eee
   }
+  .red{
+    text-align: center;
+    color:red;
+  }
   .icon{
     font-size: 50px;
     color:  #f44064;

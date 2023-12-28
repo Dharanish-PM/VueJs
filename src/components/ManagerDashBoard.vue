@@ -55,10 +55,10 @@
             class="loader"
           ></v-progress-circular>
           <p v-else-if="isErrorGettingAllRequest" class="error">
-            Unabl to Fetch
+            Unable to Fetch
           </p>
           <tbody v-else>
-            <tr v-for="(request, index) in  allSubordinateRequests" :key="index">
+            <tr  v-for="(request, index) in  allSubordinateRequests" :key="index">
               <td>{{ request.employeeName }}</td>
               <td>{{ request.actionType }}</td>
               <td>{{ request.actionStarted }}</td>
@@ -133,7 +133,7 @@
                           >
                          
                             <template v-slot:activator="{ props }">
-                              <v-btn elevation="2" @click="getWeekHistories(user.id)" rounded v-bind="props"
+                              <v-btn class="reportBtn" elevation="2" @click="getWeekHistories(user.id)" rounded v-bind="props"
                                 >Report </v-btn
                               >
                             </template>
@@ -152,13 +152,13 @@
                               </v-toolbar>
 
                               <!--Weekly-->
-                              <h1 class="overlay-heading">Weekly Report</h1>
+                              <h1 class="overlay-heading headW">Weekly Report</h1>
                               <EmployeeDashboard :userId="user.id" ></EmployeeDashboard>
 
                               <v-divider></v-divider>
 
                               <!--Monthly-->
-                              <h1 class="overlay-heading">Monthly Report</h1>
+                              <h1 class="overlay-heading headW">Monthly Report</h1>
                               <Calender
                                 class="monthlyReport"
                                 :userId="user.id"
@@ -172,7 +172,7 @@
                         <v-row justify="center">
                           <v-btn
                             elevation="2"
-                            class="nudge"
+                            class="nudge reportBtn"
                             rounded
                             @click.stop="dialog = true"
                             >Nudge</v-btn
@@ -270,6 +270,7 @@
   grid-gap: 24px;
   width: 80%;
   margin: 1rem auto;
+  margin-top: 5rem;
 }
 .box-info li {
   padding: 10px;
@@ -344,6 +345,7 @@ th {
 }
 td {
   padding: 1rem 2rem;
+  text-transform: capitalize;
 }
 .status-decline {
   border-radius: 10px;
@@ -433,6 +435,12 @@ tr:nth-child(even) {
   font-size: 40px;
   color: teal;
 }
+.headW{
+  text-align: center;
+  color:black;
+
+
+}
 h3 {
   box-shadow: 2px 1px 5px #e1e5ee;
   border-left: 10px solid teal;
@@ -474,4 +482,26 @@ h3 {
   color:red;
   
 }
+.reportBtn{
+    margin: 1rem;
+  
+}
+
+@media screen and (max-width: 768px) {
+  
+  .order{
+    overflow-x: scroll;
+  }
+
+    .reportBtn{
+        width: 30px;
+        font-size: 12px;
+  
+}
+
+   
+
+  
+}
+
 </style>

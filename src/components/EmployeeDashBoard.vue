@@ -6,7 +6,6 @@
         <div>{{ startdate }} to {{ enddate }}</div>
         <span class="navigation-icon" @click="nextWeek">▶</span>
       </div>
-      <h1>{{ userId }}</h1>
     </div>
 
     <div class="options" v-if="routeName != '/manager/team'">
@@ -15,94 +14,178 @@
         @click="startCountdown"
       >
         <button :class="{ timebtn: true }" @click="toggleText">
-          <i class="bx bx-time"></i>{{ buttonText }}
+          <i class="bx bx-time"></i>
+          <p>{{ buttonText }}</p>
         </button>
         <!-- <div>{{ currentTime }}</div> -->
       </button>
 
-      <v-btn class="nudge ma-2" @click.stop="dialog = true">Make request</v-btn>
+      <div class="right">
+        <v-btn class="nudge ma-2 requestBtn" @click.stop="dialog = true"
+          >Make request</v-btn
+        >
 
-      <v-dialog v-model="dialog" max-width="290">
-        <v-card>
-          <div class="reqLoader" v-if="requestLoader">
-            <v-progress-circular
-              indeterminate
-              color="primary"
-              class="loader"
-            ></v-progress-circular>
-            <p class="req">Sending Request</p>
-          </div>
-          <div v-else>
-            <div v-if="success" class="success">
-              <i @click="dialog = false" class="bx bx-window-close close"></i>
-              <i class="bx bxs-message-square-check"></i>
-              <p class="sentMsg">Request Sent</p>
+        <v-dialog v-model="dialog" max-width="290">
+          <v-card>
+            <div class="reqLoader" v-if="requestLoader">
+              <v-progress-circular
+                indeterminate
+                color="primary"
+                class="loader"
+              ></v-progress-circular>
+              <p class="req">Sending Request</p>
             </div>
-            <div v-else-if="errorSendingReq">
-              <i @click="dialog = false" class="bx bx-window-close close"></i>
-              <p class="errorReq">Error Sending</p>
+            <div v-else>
+              <div v-if="success" class="success">
+                <i @click="dialog = false" class="bx bx-window-close close"></i>
+                <i class="bx bxs-message-square-check"></i>
+                <p class="sentMsg">Request Sent</p>
+              </div>
+              <div v-else-if="errorSendingReq">
+                <i @click="dialog = false" class="bx bx-window-close close"></i>
+                <p class="errorReq">Error Sending</p>
+              </div>
             </div>
-          </div>
-          <div
-            class="content"
-            v-if="
-              requestLoader === false &&
-              success === false &&
-              errorSendingReq === false
-            "
-          >
-            <v-card-title class="text-h5 dialogMakeReq"> Send Request </v-card-title>
-            <div class="excuses">
-              <v-radio-group v-model="radios" class="radioBtns">
-                <v-radio label="Leave" value="Leave"></v-radio>
-                <v-radio label="WFH" value="WFH"></v-radio>
-              </v-radio-group>
-            </div>
+            <div
+              class="content"
+              v-if="
+                requestLoader === false &&
+                success === false &&
+                errorSendingReq === false
+              "
+            >
+              <v-card-title class="text-h5 dialogMakeReq">
+                Send Request
+              </v-card-title>
+              <div class="excuses">
+                <v-radio-group v-model="radios" class="radioBtns">
+                  <v-radio label="Leave" value="Leave"></v-radio>
+                  <v-radio label="WFH" value="WFH"></v-radio>
+                </v-radio-group>
+              </div>
 
-            <p v-if="restrictDate" class="dateRestrict">
-              Already Leave
-            </p>
+              <p v-if="restrictDate" class="dateRestrict">Already Leave</p>
 
-            <div class="date">
+              <div class="date">
+                <div class="dates">
+                  <label>From</label>
+                  <input
+                    required
+                    type="date"
+                    v-model="selectedFromDate"
+                    :min="minDate"
+                  />
+                </div>
+                <div class="dates">
+                  <label for="">To</label>
+                  <input
+                    type="date"
+                    v-model="selectedToDate"
+                    placeholder="To Date"
+                    :min="minDate"
+                  />
+                </div>
+              </div>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                  color="green-darken-1"
+                  variant="text"
+                  @click="dialog = false"
+                >
+                  Close
+                </v-btn>
+
+                <v-btn
+                  color="green-darken-1"
+                  variant="text"
+                  @click="sendRequest"
+                >
+                  Send
+                </v-btn>
+              </v-card-actions>
+            </div>
+          </v-card>
+        </v-dialog>
+
+        <v-btn class="nudge ma-2 edit" @click.stop="dialog2 = true"
+          ><i class="bx bxs-edit"></i>Edit</v-btn
+        >
+
+        <v-dialog v-model="dialog2" max-width="300px">
+          <v-card>
+            <div class="reqLoader" v-if="requestLoader">
+              <v-progress-circular
+                indeterminate
+                color="primary"
+                class="loader"
+              ></v-progress-circular>
+              <p class="req">Sending Request</p>
+            </div>
+            <div v-else>
+              <div v-if="success" class="success">
+                <i
+                  @click="dialog2 = false"
+                  class="bx bx-window-close close"
+                ></i>
+                <i class="bx bxs-message-square-check"></i>
+                <p class="sentMsg">Request Sent</p>
+              </div>
+              <div v-else-if="errorSendingReq">
+                <i
+                  @click="dialog2 = false"
+                  class="bx bx-window-close close"
+                ></i>
+                <p class="errorReq">Error Sending</p>
+              </div>
+            </div>
+            <div
+              class="content"
+              v-if="
+                requestLoader === false &&
+                success === false &&
+                errorSendingReq === false
+              "
+            >
+              <v-card-title class="text-h5 dialogMakeReq"> Edit </v-card-title>
+
               <div class="dates">
-                <label>From</label>
+                <label for="">Edit Date : </label>
                 <input
-                  required
                   type="date"
-                  v-model="selectedFromDate"
-                  :min="minDate"
-                 
+                  placeholder="Edit Date"
+                  v-model="selectedEditDate"
                 />
               </div>
               <div class="dates">
-                <label for="">To</label>
-                <input
-                  type="date"
-                  v-model="selectedToDate"
-                  placeholder="To Date"
-                  :min="minDate"
-                  
-                />
+                <label for="">Checkout Time : </label>
+                <input type="time" v-model="editTime" />
               </div>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                  color="green-darken-1"
+                  variant="text"
+                  @click="dialog2 = false"
+                >
+                  Close
+                </v-btn>
+
+                <v-btn
+                  color="green-darken-1"
+                  variant="text"
+                  @click="sendEditRequest"
+                >
+                  Send
+                </v-btn>
+              </v-card-actions>
             </div>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn
-                color="green-darken-1"
-                variant="text"
-                @click="dialog = false"
-              >
-                Close
-              </v-btn>
-
-              <v-btn color="green-darken-1" variant="text" @click="sendRequest">
-                Send
-              </v-btn>
-            </v-card-actions>
-          </div>
-        </v-card>
-      </v-dialog>
+          </v-card>
+        </v-dialog>
+      </div>
     </div>
 
     <v-progress-circular
@@ -140,7 +223,6 @@
               day: true,
               active: isToday(day),
             }"
-
           >
             {{ day.day }}
           </v-sheet>
@@ -156,46 +238,66 @@
             <span v-if="isToday(day)">
               <v-progress-linear
                 :model-value="progressValue"
-                height="16"
+                height="7"
                 striped
                 rounded
                 color="lime"
                 class="progress-bar"
               >
-                <div
-                  class="dot"
-                  :style="{
-                    position: 'absolute',
-                    display:'none',
-                    zIndex: '1',
-                    background: 'purple',
-                    width: '2px',
-                    height: '10px',
-                    left: currentDotPosition,
-                  }"
-                ></div>
               </v-progress-linear>
             </span>
+            <div v-else-if="day.actionType === 'leave'">
+              <p class="lv">Leave</p>
+              <v-progress-linear
+                class="parentline"
+                model-value="100"
+                bg-color="success"
+                color="error"
+              >
+              </v-progress-linear>
+            </div>
+
+            <div   v-else-if="day.actionType === 'wfh'">
+              <p class="lv">WFH</p>
+              <v-progress-linear
+                class="parentline"
+                model-value="100"
+                bg-color="success"
+                color="orange"
+              >
+              </v-progress-linear>
+            </div>
+
+
+            <div v-else-if="day.actionType === 'Public Holiday'">
+              <p class="lv">Public Holiday</p>
+              <v-progress-linear
+                class="parentline"
+                model-value="100"
+                bg-color="success"
+                color="orange"
+              >
+              </v-progress-linear>
+            </div>
+            <div v-else-if="day.actionType === 'Weekend'">
+              <p class="lv">Weekend</p>
+              <v-progress-linear
+                class="parentline"
+                model-value="100"
+                bg-color="success"
+                color="orange"
+              >
+              </v-progress-linear>
+            </div>
+
             <v-progress-linear
-              v-else-if="day.actionType === 'leave'"
-              model-value="0"
-              height="16"
-              striped
-              rounded
-              color="grey"
-            >
-              Leave</v-progress-linear
-            >
-            <v-progress-linear
-              v-else-if="day.actionType === 'wfh'"
+              v-else-if="day.checkIn !== 'undefined' "
               model-value="100"
-              height="16"
-              striped
-              rounded
-              color="grey"
-            >
-              WFH</v-progress-linear
-            >
+              bg-color="blue-grey"
+              color="lime"
+            ></v-progress-linear>
+
+
             <v-progress-linear
               v-else
               model-value="0"
@@ -226,22 +328,43 @@
 </template>
 <script src="./js/employeeDashboard"></script>
 <style scoped>
+.bx-time {
+  margin-right: 0;
+}
+.lv {
+  z-index: 100;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: bold;
+}
+
 .dates {
   padding: 10px 5px;
 }
-.sentMsg{
+.sentMsg {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
-.bx-window-close{
-
+.bx-window-close {
+}
+.edit {
+  display: flex;
+  justify-content: center;
+  width: 120px;
 }
 .options {
   display: flex;
   align-items: center;
-  margin-left: 10rem;
+  /* margin-left: 5rem;
   margin-top:2rem ;
-  margin-bottom: 2rem;
+  margin-bottom: 2rem; */
+  position: relative;
+  justify-content: space-between;
+  width: 80%;
+  margin: 2rem auto;
+}
+.right {
+  display: flex;
 }
 .nudge {
   padding: 10px 15px;
@@ -271,7 +394,11 @@
   cursor: pointer;
   margin: 0 10px;
 }
-.radioBtns{
+.bxs-edit {
+  font-size: 25px;
+  margin-right: 8px;
+}
+.radioBtns {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -356,7 +483,7 @@ thead {
   position: absolute;
   top: 40%;
   left: 48%;
-  bottom:10%;
+  bottom: 10%;
 }
 .reqLoader {
   margin: 1rem;
@@ -382,7 +509,7 @@ thead {
   top: 5px;
   font-size: 15px;
 }
-.bxs-message-square-check{
+.bxs-message-square-check {
   margin-top: 1rem;
 }
 .errorReq {
@@ -402,21 +529,18 @@ thead {
 .progress-bar {
   position: relative;
 }
-.dialogMakeReq{
+.dialogMakeReq {
   background: #f44064;
   color: #fff;
 }
-.dates{
-
+.dates {
   text-align: center;
 }
-input[type="date"]{
+input[type="date"] {
   border: 1px solid black;
- 
 }
-input[type="date"]:focus{
-outline: none;
- 
+input[type="date"]:focus {
+  outline: none;
 }
 
 
@@ -436,8 +560,15 @@ outline: none;
   .options {
     display: flex;
     justify-content: center;
-    margin-left: 0;
   }
+  .timebtn,
+  .requestBtn,
+  .edit {
+    display: flex;
+    width: 100px;
+    font-size: 10px;
+  }
+
   .day {
     font-size: 10.5px;
   }

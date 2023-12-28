@@ -9,7 +9,7 @@
 <script src="./js/calender"></script>
 <style scoped>
 .calender {
-  margin: 0 auto;
+  margin: 5rem auto;
   width: 80%;
 
 }

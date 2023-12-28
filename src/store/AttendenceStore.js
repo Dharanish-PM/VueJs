@@ -45,9 +45,6 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
       }
     },
     async swipe({ success, failure, payload }) {
-      setTimeout(()=>{
-        success & success();
-      },2000);
       
       try {
         console.log(payload);
@@ -63,7 +60,7 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
+
         success && success();
       } catch (error) {
         console.error(error);
@@ -85,7 +82,7 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
+ 
         this.weekHistory=[...this.weekHistory]
         success && success(this.role);
       } catch (error) {
@@ -137,7 +134,7 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
         }
         const data = await response.json();
         this.weekHistory=[...data];
-        console.log(this.weekHistory);
+
         success && success(this.role);
       } catch (error) {
         console.error(error);
@@ -225,6 +222,7 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      console.log(data);
       this.allNotifications=[...data];
       success && success();
     } catch (error) {
@@ -235,7 +233,7 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
 
   async updateNotification(notificationId){
     try {
-      notificationId=notificationId.toString();
+
       const response = await Service.put("/updateNotification/"+notificationId);
       if (response.status === 404) {
         failure && failure();
@@ -248,6 +246,7 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -361,13 +360,21 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
       const description = this.getDescriptionFromCheckAction(item.actionType);
       const start = item.reportDate;
       const end = item.reportDate;
+      let color;
+  if (title === "Present" || title === "Leave" || title === "Wfh") {
+    color = "#ff9f89";
+  }
+  else{
+    color="transparent";
+  }
+
       return {
         title,
         description,
         start,
         end,
         rendering: "background",
-        color: "#ff9f89"
+        color: color 
       };
     });
 
@@ -380,8 +387,8 @@ export const AttendenceStore = defineStore("AttendenceStore ", {
       return "Leave";
     } else if (checkAction === "wfh") {
       return "Wfh";
-    } else {
-      return "Unknown";
+    } else{
+      return "";
     }
   },
 
